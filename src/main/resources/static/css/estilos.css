@@ -1,0 +1,52 @@
+.botones{
+    margin-top: 150px;
+    margin-bottom: 150px;
+    position:relative;
+}
+
+#tituloEditorial{
+    text-align: center; 
+    color: white;
+}
+
+.pag{
+    background-color: black;
+}
+
+#fondoNegro{
+    background-color: black;
+}
+
+#colorLabel{
+    color: white;
+}
+
+#centrarForm{
+    text-align: center;
+}
+
+h2{
+    color: white;
+    text-align: center;
+}
+
+#formLib{
+    text-align: left;
+    width: 350px;
+    margin: 0% auto;
+}
+
+.form-group{
+    text-align: left;
+}
+
+#formEdit{
+    text-align: left;
+    width: 400px;
+    margin: 0% auto;
+}
+
+#error{
+    background-color: brown;
+    text-align: center;
+}
