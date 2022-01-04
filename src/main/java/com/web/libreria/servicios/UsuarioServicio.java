@@ -3,6 +3,7 @@ package com.web.libreria.servicios;
 import com.web.libreria.entidades.Foto;
 import com.web.libreria.entidades.Usuario;
 import com.web.libreria.entidades.Zona;
+import com.web.libreria.enums.Rol;
 import com.web.libreria.errores.ErrorServicio;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.web.libreria.repositorios.UsuarioRepositorio;
 import com.web.libreria.repositorios.ZonaRepositorio;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import org.springframework.security.core.GrantedAuthority;
@@ -36,7 +38,7 @@ public class UsuarioServicio implements UserDetailsService {
     private ZonaRepositorio zonaRepositorio;
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
-    public void registrarUsuario(MultipartFile archivo, String nombre, String apellido, String mail, String clave, String clave2, Long documento, String telefono, String idZona) throws ErrorServicio {
+    public void registrarUsuario(MultipartFile archivo, String nombre, String apellido, String mail, String clave, String clave2, String documento, String telefono, String idZona) throws ErrorServicio {
 
         Zona zona = zonaRepositorio.getById(idZona);
         validar(nombre, apellido, mail, clave, clave2, documento, telefono, zona);
@@ -49,7 +51,8 @@ public class UsuarioServicio implements UserDetailsService {
         usuario.setClave(encriptada);
         usuario.setDocumento(documento);
         usuario.setTelefono(telefono);
-        usuario.setAlta(true);
+        usuario.setRol(Rol.USUARIO);
+        usuario.setAlta(new Date());
         Foto foto = fotoServicio.guardar(archivo);
         usuario.setFoto(foto);
         usuario.setZona(zona);
@@ -58,10 +61,10 @@ public class UsuarioServicio implements UserDetailsService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
-    public void modificarUsuario(MultipartFile archivo, String id, String nombre, String apellido, String mail, String clave, String clave2, Long documento, String telefono, String idZona) throws ErrorServicio {
+    public void modificarUsuario(MultipartFile archivo, String id, String nombre, String apellido, String mail, String clave, String clave2, String documento, String telefono, String idZona) throws ErrorServicio {
 
         Zona zona = zonaRepositorio.getOne(idZona);
-        validar(nombre, apellido, id, nombre, nombre, documento, telefono, zona);
+        validar(nombre, apellido, mail, clave, clave2, documento, telefono, zona);
         Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
 
         if (respuesta.isPresent()) {
@@ -74,7 +77,6 @@ public class UsuarioServicio implements UserDetailsService {
             usuario.setClave(encriptada);
             usuario.setDocumento(documento);
             usuario.setTelefono(telefono);
-            usuario.setAlta(true);
             Foto foto = fotoServicio.guardar(archivo);
             usuario.setFoto(foto);
             usuario.setZona(zona);
@@ -90,7 +92,7 @@ public class UsuarioServicio implements UserDetailsService {
         Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
         if (respuesta.isPresent()) {
             Usuario usuario = respuesta.get();
-            usuario.setAlta(false);
+            usuario.setBaja(new Date());
             usuarioRepositorio.save(usuario);
         } else {
             throw new ErrorServicio("No se encontro el usuario solicitado");
@@ -102,17 +104,21 @@ public class UsuarioServicio implements UserDetailsService {
         Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
         if (respuesta.isPresent()) {
             Usuario usuario = respuesta.get();
-            usuario.setAlta(true);
-            usuarioRepositorio.save(usuario);
+            if (usuario.getBaja() == null) {
+                throw new ErrorServicio("El usuario no se encuentra dado de baja.");
+            } else {
+                usuario.setBaja(null); // Borramos la fecha de baja
+                usuarioRepositorio.save(usuario);
+            }
         } else {
             throw new ErrorServicio("No se encontro el usuario solicitado");
         }
     }
 
-    public void validar(String nombre, String apellido, String mail, String clave, String clave2, Long documento, String telefono, Zona zona) throws ErrorServicio {
+    public void validar(String nombre, String apellido, String mail, String clave, String clave2, String documento, String telefono, Zona zona) throws ErrorServicio {
 
-        if (Long.toString(documento).length() != 8) {
-            throw new ErrorServicio("El documento no puede contener ni menos ni mas de 8 numeros");
+        if (documento == null || documento.isEmpty() || documento.length() != 8) {
+            throw new ErrorServicio("El documento no puede ser nulo");
         }
         if (nombre == null || nombre.isEmpty()) {
             throw new ErrorServicio("El nombre no puede ser nulo");
@@ -137,21 +143,6 @@ public class UsuarioServicio implements UserDetailsService {
         }
     }
 
-    @Transactional(readOnly = true)
-    public Usuario buscarPorId(String id) throws ErrorServicio {
-
-        Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
-        if (respuesta.isPresent()) {
-
-            Usuario usuario = respuesta.get();
-            return usuario;
-        } else {
-
-            throw new ErrorServicio("No se encontró el usuario solicitado");
-        }
-
-    }
-
     @Override
     public UserDetails loadUserByUsername(String mail) throws UsernameNotFoundException {
 
@@ -161,7 +152,7 @@ public class UsuarioServicio implements UserDetailsService {
 
             List<GrantedAuthority> permisos = new ArrayList<>();
 
-            GrantedAuthority p1 = new SimpleGrantedAuthority("ROLE_USUARIO_REGISTRADO");
+            GrantedAuthority p1 = new SimpleGrantedAuthority("ROLE_" + usuario.getRol());
             permisos.add(p1);
 
             //Esto me permite guardar el OBJETO USUARIO LOG, para luego ser utilizado
@@ -175,5 +166,40 @@ public class UsuarioServicio implements UserDetailsService {
         } else {
             return null;
         }
+    }
+
+    //*****************************METODOS REPOSITORIO*********************************
+    @Transactional(readOnly = true)
+    public Usuario buscarPorId(String id) throws ErrorServicio {
+
+        Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
+        if (respuesta.isPresent()) {
+            Usuario usuario = respuesta.get();
+            return usuario;
+        } else {
+            throw new ErrorServicio("No se encontró el usuario solicitado");
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public Usuario getById(String id) {
+        return usuarioRepositorio.getById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Usuario getOne(String id) {
+        return usuarioRepositorio.getOne(id);
+    }
+
+    public List<Usuario> findAll() {
+        return usuarioRepositorio.findAll();
+    }
+
+    public List<Usuario> buscarActivos() {
+        return usuarioRepositorio.buscarActivos();
+    }
+
+    public List<Usuario> buscarInactivos() {
+        return usuarioRepositorio.buscarInactivos();
     }
 }

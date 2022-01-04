@@ -17,11 +17,11 @@ public class Foto {
     private String id;
 
     private String nombre;
-    private String mime;
+    private String mime;// Asigna el formato del archivo de la foto.
 
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    private byte[] contenido;
+    @Lob //Identifica que el tipo de dato es pesado.
+    @Basic(fetch = FetchType.LAZY) // indica que cargue el contenido sólo cuando lo pidamos.
+    private byte[] contenido; // Guarda el contenido de la foto.
 
     public String getId() {
         return id;

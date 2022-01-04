@@ -1,11 +1,17 @@
 package com.web.libreria.entidades;
 
+import com.web.libreria.enums.Rol;
+import java.util.Date;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class Usuario {
@@ -18,12 +24,24 @@ public class Usuario {
     private String apellido;
     private String mail;
     private String clave;
-    private Long documento;
+    private String documento;
     private String telefono;
-    private boolean alta;
+
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date alta;
+
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date baja;
+
+    @Enumerated(EnumType.STRING)
+    private Rol rol;
+
     @OneToOne
     private Foto foto;
-    @ManyToOne
+
+    @OneToOne
     private Zona zona;
 
     public String getId() {
@@ -32,14 +50,6 @@ public class Usuario {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public Long getDocumento() {
-        return documento;
-    }
-
-    public void setDocumento(Long documento) {
-        this.documento = documento;
     }
 
     public String getNombre() {
@@ -58,22 +68,6 @@ public class Usuario {
         this.apellido = apellido;
     }
 
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public boolean isAlta() {
-        return alta;
-    }
-
-    public void setAlta(boolean alta) {
-        this.alta = alta;
-    }
-
     public String getMail() {
         return mail;
     }
@@ -88,6 +82,46 @@ public class Usuario {
 
     public void setClave(String clave) {
         this.clave = clave;
+    }
+
+    public String getDocumento() {
+        return documento;
+    }
+
+    public void setDocumento(String documento) {
+        this.documento = documento;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public Date getAlta() {
+        return alta;
+    }
+
+    public void setAlta(Date alta) {
+        this.alta = alta;
+    }
+
+    public Date getBaja() {
+        return baja;
+    }
+
+    public void setBaja(Date baja) {
+        this.baja = baja;
+    }
+
+    public Rol getRol() {
+        return rol;
+    }
+
+    public void setRol(Rol rol) {
+        this.rol = rol;
     }
 
     public Foto getFoto() {

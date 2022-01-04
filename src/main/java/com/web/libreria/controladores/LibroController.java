@@ -1,5 +1,7 @@
 package com.web.libreria.controladores;
 
+import com.web.libreria.entidades.Autor;
+import com.web.libreria.entidades.Editorial;
 import com.web.libreria.entidades.Libro;
 import com.web.libreria.errores.ErrorServicio;
 import com.web.libreria.servicios.AutorServicio;
@@ -7,6 +9,7 @@ import com.web.libreria.servicios.EditorialServicio;
 import com.web.libreria.servicios.LibroServicio;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/libros")
@@ -26,15 +30,21 @@ public class LibroController {
     @Autowired
     private EditorialServicio editorialServicio;
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/registro")
-    public String registroLibro() {
+    public String registroLibro(ModelMap modelo) {
+        List<Autor> listaAutores = autorServicio.listarAutores();
+        modelo.addAttribute("autores", listaAutores);
+        List<Editorial> listaEditoriales = editorialServicio.listarEditoriales();
+        modelo.addAttribute("editoriales", listaEditoriales);
         return "registroLibro.html";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping("/registro")
-    public String registroLibro(ModelMap modelo, @RequestParam Integer isbn, @RequestParam String titulo, @RequestParam Integer anio, @RequestParam Integer ejemplares, @RequestParam Integer ejemplaresPrestados, @RequestParam Integer ejemplaresRestantes, @RequestParam String nombreAutor, @RequestParam String nombreEditorial) {
+    public String registroLibro(ModelMap modelo, MultipartFile archivo, @RequestParam String isbn, @RequestParam String titulo, @RequestParam String descripcion, @RequestParam Integer anio, @RequestParam Integer ejemplares, String idAutor, String nombreAutor, String idEditorial, String nombreEditorial) {
         try {
-            libroServicio.agregarLibro(isbn, titulo, anio, ejemplares, ejemplaresPrestados, ejemplaresRestantes, nombreAutor, nombreEditorial);
+            libroServicio.agregarLibro(archivo, isbn, titulo, descripcion, anio, ejemplares, idAutor, nombreAutor, idEditorial, nombreEditorial);
 
 //            modelo.put("exito", "Registro exitoso");
 //            return "registroLibro";
@@ -44,10 +54,9 @@ public class LibroController {
             modelo.put("error", ex.getMessage());
             modelo.put("isbn", isbn);
             modelo.put("titulo", titulo);
+            modelo.put("descripcion", descripcion);
             modelo.put("anio", anio);
             modelo.put("ejemplares", ejemplares);
-            modelo.put("ejPrestados", ejemplaresPrestados);
-            modelo.put("ejRestantes", ejemplaresRestantes);
             modelo.put("nombreAutor", nombreAutor);
             modelo.put("nombreEditorial", nombreEditorial);
             return "registroLibro";
@@ -58,53 +67,61 @@ public class LibroController {
         return "exito.html";
     }
 
-    @GetMapping("/mostrarLibros")
-    public String mostrarLibros(ModelMap modelo) {
-        List<Libro> listaLibros = libroServicio.listarLibros();
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USUARIO')")
+    @GetMapping("/mostrarLibro/{id}")
+    public String mostrarLibros(@PathVariable String id, ModelMap modelo) {
 
-        modelo.addAttribute("libros", listaLibros);
+        modelo.put("libro", libroServicio.getOne(id));
 
-        return "mostrarLibros.html";
+        return "mostrarLibro.html";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/baja/{id}")
     public String baja(@PathVariable String id) {
 
         try {
             libroServicio.baja(id);
-            return "redirect:/libros/mostrarLibros";
+            return "redirect:/libros";
         } catch (Exception e) {
             return "redirect:/";
         }
 
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/alta/{id}")
     public String alta(@PathVariable String id) {
 
         try {
             libroServicio.alta(id);
-            return "redirect:/libros/mostrarLibros";
+            return "redirect:/libros";
         } catch (Exception e) {
             return "redirect:/";
         }
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/modificar/{id}") //PATHVARIABLE
     public String modificar(@PathVariable String id, ModelMap modelo) {
 
         modelo.put("libro", libroServicio.getOne(id));
-        
+        List<Autor> listaAutores = autorServicio.listarAutores();
+        modelo.addAttribute("autores", listaAutores);
+        List<Editorial> listaEditoriales = editorialServicio.listarEditoriales();
+        modelo.addAttribute("editoriales", listaEditoriales);
+
         return "modificarLibro.html";
 
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping("/modificar/{id}")
-    public String modificar(ModelMap modelo, @PathVariable String id, @RequestParam Integer isbn, @RequestParam String titulo, @RequestParam Integer anio, @RequestParam Integer ejemplares, @RequestParam Integer ejemplaresPrestados, @RequestParam Integer ejemplaresRestantes, @RequestParam String nombreAutor, @RequestParam String nombreEditorial) {
+    public String modificar(ModelMap modelo, MultipartFile archivo, @PathVariable String id, @RequestParam String isbn, @RequestParam String titulo, @RequestParam String descripcion, @RequestParam Integer anio, @RequestParam Integer ejemplares, String idAutor, String nombreAutor, String idEditorial, @RequestParam(required = false) String nombreEditorial) {
 
         try {
-            libroServicio.modificarLibro(id, titulo, isbn, anio, ejemplares, ejemplaresPrestados, ejemplaresRestantes, nombreAutor, nombreEditorial);
-            return "redirect:/libros/mostrarLibros";
+            libroServicio.modificarLibro(archivo, id, titulo, descripcion, isbn, anio, ejemplares, idAutor, nombreAutor, idEditorial, nombreEditorial);
+            return "redirect:/libros";
 
         } catch (Exception e) {
 

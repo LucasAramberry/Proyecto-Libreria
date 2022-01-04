@@ -1,18 +1,145 @@
 <!DOCTYPE html>
 <html lang="es" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
     <!-- Head -->
+    <head>
+        <title>Libreria - Inicio</title>
+    </head>
     <head th:replace="/fragments/head :: head"></head>
 
-    <body id="fondoNegro">
+    <!--BODY-->
+    <body id="fondoColor">
 
+        <!--NAVBAR-->
         <nav th:replace="/fragments/navbar :: nav"></nav>
 
-        <div>
-            <h1 style="text-align: center; color: white; margin-top: 200px">Usuario Logueado</h1>
+        <!--SECCION ADMIN-->
+        <div sec:authorize="hasRole('ADMIN')">
+            <div>
+                <h1 class="text-white text-center" style="margin: 1% auto">CUENTA ADMINISTRADOR</h1>
+                <br>
+            </div>
+
+            <div class="text-center" style="width: 700px; margin: 0.5% auto">
+                <h5 class="text-white">Puede crear, modificar, eliminar y dar de alta/baja los libros, editoriales, autores y ademas puede gestionar usuarios.</h5><br>
+            </div>
+
+            <div>
+                <h5 class="text-white text-center">A continuación seleccione que desea gestionar:</h5><br>
+            </div>
+            <div class="form-group2">
+                <a class="btn btn-dark" href="/libros" role="button">Gestionar libros</a>
+            </div>
+            <div class="form-group2">
+                <a class="btn btn-dark" href="/autores" role="button">Gestionar autores</a>
+            </div>
+            <div class="form-group2">
+                <a class="btn btn-dark" href="/editoriales" role="button">Gestionar editoriales</a>
+            </div>
+            <div class="form-group2">
+                <a class="btn btn-warning" href="/admin-usuarios" role="button">Gestionar usuarios</a>
+            </div>
+
+            <!--FOOTER-->
+            <div class="fixed-bottom">
+                <footer th:replace="/fragments/footer :: footer"></footer>
+            </div>
         </div>
 
+        <!--SECCION USUARIO-->
+        <div sec:authorize="hasRole('USUARIO')">
 
-        <script th:replace="/fragments/boostjs :: script"></script>
+            <!--CARROUSEL-->
+            <!--            <div id="carouselExampleCaptions" class="carousel slide carousel-fade" data-bs-ride="carousel">
+            
+                            <div class="carousel-indicators">
+            
+                                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            
+                            </div>
+            
+                            <div class="carousel-inner">
+            
+                                <div class="carousel-item active">
+            
+                                    <img src="img/libros.jpeg" class="d-block w-100" alt="Libros" title="Libros">
+                                        <div class="carousel-caption d-none d-md-block">
+                                            <h6>Libros mas vendidos</h6>
+                                        </div>
+            
+                                </div>
+                                <div class="carousel-item">
+            
+                                    <a href=""><img src="img/editoriales_1.jpg" class="d-block w-100" alt="Editoriales" title="Editoriales"></a>
+                                    <a href=""><img src="img/mas_vendidos_ficcion.jpg" class="d-block w-100" alt="Libros mas vendidos ficcion" title="Libros mas vendidos ficcion"></a>
+                                    <div class="carousel-caption d-none d-md-block">
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="img/editoriales.jpg" class="d-block w-100" alt="Editoriales" title="Editoriales">
+                                        <div class="carousel-caption d-none d-md-block">
+                                            <h6>Editoriales mas consultadas</h6>
+                                        </div>
+                                </div>
+            
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>-->
+            <div style="width: 600px; margin: 2% auto">
+                <h1 class="text-center bg-dark text-white">LIBROS DISPONIBLES</h1>
+            </div>
+
+            <div class="dropdown text-center form-group2">
+                <a class="btn btn-dark dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                    Filtrar por...
+                </a>
+
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <li><a class="dropdown-item" href="/autores">Autor</a></li>
+                    <li><a class="dropdown-item" href="/editoriales">Editorial</a></li>
+                    <!--<li><a class="dropdown-item" href="/libros">Titulo del libro</a></li>-->
+                </ul>
+            </div>
+
+            <div class="contenedor">
+                <div class="contenedorHijo" th:each="libro : ${libros}">
+                    <div class="card mb-3 bg-dark text-white" style="max-width: 550px;">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                <img th:src="@{'/foto/libro/' + ${libro.id}}" class="img-fluid rounded-start" alt="Portada">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title" th:text="${libro.titulo}"></h5><br>
+                                        <ul>
+                                            <li th:text="'ISBN: ' + ${libro.isbn}"></li>
+                                            <li th:text="'AUTOR: ' + ${libro.autor.nombre}"></li>
+                                            <li th:text="'EDITORIAL: ' + ${libro.editorial.nombre}"></li>
+                                            <li th:text="'EJEMPLARES DISPONIBLES: ' + ${libro.ejemplaresRestantes}"></li>
+                                        </ul>
+                                        <div class="form-group2">
+                                            <a class="btn btn-warning" th:href="@{/libros/mostrarLibro/__${libro.id}__}" role="button">Ver más</a>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--FOOTER-->
+            <footer th:replace="/fragments/footer :: footer"></footer>
+
+        </div>
+
     </body>
-
 </html>

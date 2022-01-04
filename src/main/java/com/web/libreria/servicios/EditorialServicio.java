@@ -55,8 +55,18 @@ public class EditorialServicio {
     }
     
     @Transactional(readOnly = true)
+    public List<Editorial> listarEditorialesActivas() {
+        return editorialRepositorio.buscarActivos();
+    }
+    
+    @Transactional(readOnly = true)
     public Editorial getOne(String id) {
         return editorialRepositorio.getOne(id);
+    }
+    
+    @Transactional(readOnly = true)
+    public Editorial getById(String id) {
+        return editorialRepositorio.getById(id);
     }
     
     public Editorial alta(String id) {
@@ -80,5 +90,12 @@ public class EditorialServicio {
         if (nombre == null || nombre.isEmpty()) {
             throw new ErrorServicio("El nombre no puede ser nulo");
         }
+    }
+    
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
+    public void delete(String id) {
+
+        Editorial editorial = getOne(id);
+        editorialRepositorio.delete(editorial);
     }
 }

@@ -31,16 +31,16 @@ public class AutorServicio {
 
     @Transactional
     public Autor modificarAutor(String id, String nombre) throws ErrorServicio {
-        
+
         validarAutor(nombre);
         Optional<Autor> respuesta = autorRepositorio.findById(id);
-        
+
         if (respuesta.isPresent()) {
             Autor autor = respuesta.get();
             autor.setNombre(nombre);
             autor.setAlta(true);
             return autorRepositorio.save(autor);
-            
+
         } else {
             throw new ErrorServicio("No se encontro el autor solicitado.");
         }
@@ -50,12 +50,17 @@ public class AutorServicio {
     public List<Autor> listarAutores() {
         return autorRepositorio.findAll();
     }
-    
+
     @Transactional(readOnly = true)
     public Autor getOne(String id) {
         return autorRepositorio.getOne(id);
     }
-    
+
+    @Transactional(readOnly = true)
+    public Autor getById(String id) {
+        return autorRepositorio.getById(id);
+    }
+
     public Autor alta(String id) {
 
         Autor entidad = autorRepositorio.getOne(id);
@@ -73,9 +78,22 @@ public class AutorServicio {
         return autorRepositorio.save(entidad);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
+    public void delete(String id) {
+
+        Autor autor = getOne(id);
+        autorRepositorio.delete(autor);
+    }
+
     private void validarAutor(String nombre) throws ErrorServicio {
         if (nombre == null || nombre.isEmpty()) {
             throw new ErrorServicio("El nombre del autor no puede ser nulo");
         }
     }
+
+    @Transactional(readOnly = true)
+    public List<Autor> listarActivos() {
+        return autorRepositorio.buscarActivos();
+    }
+
 }
