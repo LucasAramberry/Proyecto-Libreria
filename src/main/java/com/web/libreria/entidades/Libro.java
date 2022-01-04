@@ -13,8 +13,9 @@ public class Libro {
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
-    private Integer isbn;
+    private String isbn;
     private String titulo;
+    private String descripcion;
     private Integer anio;
     private Integer ejemplares;
     private Integer ejemplaresPrestados;
@@ -24,7 +25,9 @@ public class Libro {
     private Autor autor;
     @OneToOne
     private Editorial editorial;
-    
+    @OneToOne
+    private Foto foto;
+
     public String getId() {
         return id;
     }
@@ -33,11 +36,11 @@ public class Libro {
         this.id = id;
     }
 
-    public Integer getIsbn() {
+    public String getIsbn() {
         return isbn;
     }
 
-    public void setIsbn(Integer isbn) {
+    public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
 
@@ -103,6 +106,22 @@ public class Libro {
 
     public void setEditorial(Editorial editorial) {
         this.editorial = editorial;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public Foto getFoto() {
+        return foto;
+    }
+
+    public void setFoto(Foto foto) {
+        this.foto = foto;
     }
 
 }

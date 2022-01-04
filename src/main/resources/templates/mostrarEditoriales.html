@@ -13,7 +13,7 @@
     </head>
 
     <body id="fondoNegro">
-        
+
         <nav th:replace="/fragments/navbar :: nav"></nav>
 
         <table class="table table-secondary" style="margin-top: 50px">
@@ -37,6 +37,7 @@
                         <a th:href="@{/editoriales/alta/__${editorial.id}__}"><i class="fa fa-arrow-up"></i></a>
                         <a th:href="@{/editoriales/baja/__${editorial.id}__}"><i class="fa fa-ban"></i></a> 
                         <a th:href="@{/editoriales/modificar/__${editorial.id}__}"><i class="fas fa-feather-alt"></i></a>
+                        <a th:href="@{/editoriales/delete/__${editorial.id}__}"><i class="fas fa-archive"></i></a>
                     </td>
                 </tr>
             </tbody>

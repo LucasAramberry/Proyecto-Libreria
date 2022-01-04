@@ -1,7 +1,121 @@
+html,body {
+    height:100%;
+}
+
+#wrapper {
+    min-height:100%;
+}
+
+body{
+    height: 100%;
+    margin:0;
+    padding:0;
+    font-family: monospace
+}
+
+#fondo{
+    position: relative;
+    min-height: 100%;
+    background-image: url(../img/libreria.jpg);
+    background-attachment: scroll;
+    background-size: auto;
+    background-position: center;
+}
+
+#pie{
+    height:50px;
+    line-height:50px;
+    bottom:0;
+    left:0;
+    width:100%;
+    text-align:center;
+    font-family: monospace;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.514);
+    border-radius: 2px;
+    background-color: rgb(19, 19, 24);
+    position: relative;
+}
+
+img{
+    height: 525px;
+}
+
+h2{
+    margin: 5% auto;
+    color: white;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+/*********************************ESTILOS CARRUSEL***************************************/
+
+.carousel-indicators{
+    margin-bottom: 0rem;
+}
+
+.carousel-control-prev{
+    width: 10%
+}
+
+.carousel-control-next{
+    width: 10%
+}
+
+.carousel{
+    width: 60%;
+    margin: 2% auto;
+}
+
+.carousel-caption{
+    color: black;
+    bottom: 29.75rem;   
+    right: 0%;
+    left: 0%;
+}
+
+.carousel-inner{
+    width: 100%;
+}
+
+/**************************************ESTILOS NAVBAR*************************************/
+
+.navbar{
+    font-family: Tahoma;
+}
+
+.navbar-brand{
+    margin-left: 1rem;  
+    font-family: monospace;
+}
+
+.nav-item{
+    margin-right: 0.5rem
+}
+
 .botones{
-    margin-top: 150px;
-    margin-bottom: 150px;
-    position:relative;
+    margin: 10% auto;
+    text-align: center
+}
+
+#agregar-button{
+    background-color: black;
+    text-align: center;
+    margin-bottom: 4%
+}
+
+.rounded{
+    width: 12rem;
+    height: 17rem;
+    margin-right: 10%;
+    border: double;
+}
+
+.table{
+    margin-top: 2%;
+    margin-bottom: 2%;
+    text-align: center;
+    border-collapse: separate;
+    border-color: white
 }
 
 #tituloEditorial{
@@ -9,44 +123,179 @@
     color: white;
 }
 
-.pag{
-    background-color: black;
-}
-
-#fondoNegro{
-    background-color: black;
+#fondoColor{
+    background-image: url(../img/fondoColor.jpg);
+    position: relative;
+    min-height: 100%;
+    background-attachment: scroll;
+    background-size: auto;
+    background-position: center;
 }
 
 #colorLabel{
-    color: white;
+    /*color: white;*/
 }
 
 #centrarForm{
     text-align: center;
 }
 
-h2{
-    color: white;
+
+
+.fondoTitulo{
+    width: 37rem;
+    margin: 1% auto;
+    font-family: monospace;
     text-align: center;
-}
-
-#formLib{
-    text-align: left;
-    width: 350px;
-    margin: 0% auto;
-}
-
-.form-group{
-    text-align: left;
-}
-
-#formEdit{
-    text-align: left;
-    width: 400px;
-    margin: 0% auto;
 }
 
 #error{
     background-color: brown;
     text-align: center;
 }
+
+/*****************************************ESTILOS FORM**************************************/
+
+#formEdit{
+    text-align: left;
+    width: 400px;
+    margin: 0% auto;
+    color: white;
+}
+
+.fondoForm{
+    width: 32rem;
+    margin: 6.5% auto;
+    font-family: monospace;
+    align-content: center;
+    height: 18.5rem;
+    color: white
+}
+
+.form-group{
+    margin: auto;
+    width: 380px
+}
+
+.form-group2{
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    color: white
+}
+
+.form-control{
+    margin-bottom: 0.5rem;
+}
+
+a{
+    /*margin-bottom: 0.5rem;*/
+    text-decoration: none;
+    color: darkgoldenrod;
+}
+
+#fondo-form-user{
+    width: 32rem;
+    margin: 2% auto;
+    height: 49rem;
+    font-family: monospace
+}
+
+.centrado{
+    margin: 10% auto;
+}
+
+/****************************************ESTILOS CARDS********************************************/
+
+.card{
+    width: 34rem;
+    height: 16.2rem;
+}
+
+.img-fluid{
+    height: 16rem;
+}
+
+.row{
+    width: 542px;
+    height: 256px;
+}
+
+.contenedor{
+    display: flex !important;
+    flex-wrap: wrap;
+    padding-bottom: 40px
+}
+
+.contenedorHijo{
+    padding-top: 10px; 
+    padding-right: 15px;
+    padding-bottom: 10px;
+    padding-left: 80px;
+}
+
+/****************************************ESTILOS FILTRAR**************************************/
+
+.filtrar{
+    width: 400px;
+    height: 125px;
+    text-align: center;
+    border-style: double;
+    border-color: brown;
+    margin: 2% auto
+}
+
+.filtrar-select{
+    margin: 1% auto;
+    width: 300px;
+    height: 30px
+}
+
+.filtrar-boton{
+    margin: 2% auto
+}
+
+/***********************************ESTILOS PAGINA LIBRO*****************************************/
+
+.contenedor1{
+    display: flex !important;
+    flex-wrap: wrap;
+}
+
+.contenedorHijo1{
+    padding: 5% auto;
+    margin: 2% auto;
+}
+
+.card1{
+    width: 60rem;
+    height: 38rem;
+}
+
+.img-fluid1{
+    width: 13.5rem;
+    height: 20rem;
+}
+
+.card-body1{
+    margin: 2% auto;
+    width: 750px;
+    padding-left: 45px;
+}
+
+.card-body2{
+    margin: 2% auto;
+    width: 700px;
+    padding-left: 58px;
+}
+
+.card-title1{
+    text-align: center;
+    margin-top: 2%
+}
+
+.items{
+    margin-bottom: 2%
+}
+
+/*****************************ESTILOS DROPDOWN***************************/
