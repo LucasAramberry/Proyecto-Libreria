@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+    <!--HEAD-->
+    <head th:replace="/fragments/head :: head"></head>
+    <head>
+        <title>Libreria - Usuarios</title>
+    </head>
+
+    <!--BODY-->
+    <body id="fondoColor">
+
+        <!--NAV-->
+        <nav th:replace="/fragments/navbar :: nav"></nav>
+
+        <!--SECCION ADMINISTRADOR-->
+        <div sec:authorize="hasRole('ADMIN')">
+
+            <h1 id="tituloEditorial">GESTIONAR USUARIOS</h1>
+
+            <div class="text-white text-center" style="width: 800px; margin: 1% auto">
+                <h5>Para dar de alta oprima <i class="fa fa-arrow-up"></i>, si desea dar de baja oprima <i class="fa fa-ban"></i>, si desea modificar oprima <i class="fas fa-feather-alt"></i>.</h5>
+            </div>
+            <div>
+
+                <table class="table table-dark">
+                    <thead>
+                        <tr>
+                            <th scope="col" style="width: 200px">ID</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Apellido</th>
+                            <th scope="col">Mail</th>
+                            <th scope="col">DNI</th>
+                            <th scope="col">Telefono</th>
+                            <th scope="col">Fecha Alta</th>
+                            <th scope="col">Fecha Baja</th>
+                            <th scope="col">¿Activo?</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody th:each="usuario : ${usuarios}">
+                        <tr>
+                            <th scope="row" th:text="${usuario.id}"></th>
+                            <td th:text="${usuario.nombre}"></td>
+                            <td th:text="${usuario.apellido}"></td>
+                            <td th:text="${usuario.mail}"></td>
+                            <td th:text="${usuario.documento}"></td>
+                            <td th:text="${usuario.telefono}"></td>
+                            <td th:text="${usuario.alta}"></td>
+                            <td th:text="${usuario.baja}"></td>
+                            
+                            <td>
+                                <i th:if="${usuario.alta}" class="fa fa-circle text-success"></i>
+                                <i th:unless="${usuario.alta}" class="fa fa-circle" style="color:red;"></i>
+                            </td>
+                            <td>
+                                <a th:href="@{/usuario/alta/__${usuario.id}__}" title="Alta"><i class="fa fa-arrow-up"></i></a>
+                                <a th:href="@{/usuario/baja/__${usuario.id}__}" title="Baja"><i class="fa fa-ban"></i></a> 
+                                <a th:href="@{/usuario/modificar/__${usuario.id}__}" title="Modificar"><i class="fas fa-feather-alt"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+        <!--FOOTER-->
+        <div class="fixed-bottom">
+            <footer th:replace="/fragments/footer :: footer"></footer>
+        </div>
+    </body>
+
+</html>

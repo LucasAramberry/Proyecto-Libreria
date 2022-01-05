@@ -19,6 +19,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+/**
+ * Controlador principal
+ *
+ * @author Lucas Aramberry / aramberrylucas@gmail.com
+ */
 @Controller
 @RequestMapping("/")
 public class PortalController {
@@ -40,8 +45,6 @@ public class PortalController {
     @GetMapping("/libros")
     public String libros(ModelMap modelo) {
 
-//        List<Libro> listaLibrosActivos = libroServicio.listarLibrosActivos();
-//        modelo.addAttribute("librosA", listaLibrosActivos);
         List<Libro> listaLibros = libroServicio.listarLibros();
         modelo.addAttribute("libros", listaLibros);
 
@@ -85,7 +88,7 @@ public class PortalController {
         List<Usuario> listaUsuarios = usuarioServicio.findAll();
         modelo.addAttribute("usuarios", listaUsuarios);
         
-        return "usuario.html";
+        return "admin-usuarios.html";
     }
 
     @GetMapping("/")

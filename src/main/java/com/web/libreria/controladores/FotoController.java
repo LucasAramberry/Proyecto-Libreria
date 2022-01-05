@@ -17,6 +17,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * Controlador para gestionar la entidad Foto en donde se realizan las
+ * funciones de mostrar foto de autor o usuario
+ *
+ * @author Lucas Aramberry / aramberrylucas@gmail.com
+ */
 @Controller
 @RequestMapping("/foto")
 public class FotoController {
@@ -26,6 +32,12 @@ public class FotoController {
     @Autowired
     private LibroServicio libroServicio;
 
+    
+    /**
+     * Funcion para mostrar imagen de perfil del usuario
+     * @param id
+     * @return 
+     */
     @GetMapping("/usuario/{id}")
     public ResponseEntity<byte[]> fotoUsuario(@PathVariable String id) {
         try {
@@ -47,6 +59,11 @@ public class FotoController {
         }
     }
 
+    /**
+     * Funcion para mostrar la portada del libro
+     * @param id
+     * @return 
+     */
     @GetMapping("/libro/{id}")
     public ResponseEntity<byte[]> fotoMascota(@PathVariable String id) {
         try {

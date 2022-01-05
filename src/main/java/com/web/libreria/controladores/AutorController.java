@@ -17,7 +17,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-//Controlador para gestionar Autores
+/**
+ * Controlador para gestionar la entidad autor en donde se realizan las
+ * funciones de registrar, modificar, eliminar o dar de alta/baja
+ *
+ * @author Lucas Aramberry / aramberrylucas@gmail.com
+ */
 @Controller
 @RequestMapping("/autores")
 public class AutorController {
@@ -29,18 +34,18 @@ public class AutorController {
     @Autowired
     private EditorialServicio editorialServicio;
 
-    
     /**
-     * Muestra los libros y autores
+     * Funcion que muestra los libros filtrados por autor en la vista /autores
+     *
      * @param model
      * @param idAutor
-     * @return 
+     * @return
      */
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USUARIO')")
     @GetMapping("/autores")
     public String autores(ModelMap model, String idAutor) {
         List<Autor> listaActivos = autorServicio.listarActivos();
-        model.addAttribute("autoresA",listaActivos);
+        model.addAttribute("autoresA", listaActivos);
         model.addAttribute("autorSelected", autorServicio.getById(idAutor));
 //        List<Autor> autores = autorServicio.listarAutores();
 //        model.addAttribute("autores", autores);
@@ -49,6 +54,11 @@ public class AutorController {
         return "redirect:/autores";
     }
 
+    /**
+     * Funcion para ingresar a la vista de registro de autor
+     *
+     * @return
+     */
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/registroAutor")
     public String registroAutor() {
@@ -56,10 +66,13 @@ public class AutorController {
     }
 
     /**
-     * Metodo para registrar un autor
+     * Funcion para registrar un autor, se envian los datos ingresados al
+     * servicio quien se encarga de ingresar el autor a la DB y si sale bien
+     * retorna la vista exito y si hay un error retorna la vista error
+     *
      * @param modelo
      * @param nombreAutor
-     * @return 
+     * @return
      */
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping("/registroAutor")
@@ -77,15 +90,13 @@ public class AutorController {
         return "exito.html";
     }
 
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-//    @GetMapping("/mostrarAutores")
-//    public String mostrarAutores(ModelMap modelo) {
-//        List<Autor> listaAutores = autorServicio.listarAutores();
-//
-//        modelo.addAttribute("autores", listaAutores);
-//
-//        return "mostrarAutores.html";
-//    }
+    /**
+     * Funcion para ingresar a la vista de modificacion del autor seleccionado
+     *
+     * @param id
+     * @param modelo
+     * @return
+     */
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/modificar/{id}") //PATHVARIABLE
     public String modificar(@PathVariable String id, ModelMap modelo) {
@@ -95,6 +106,15 @@ public class AutorController {
         return "modificarAutor.html";
     }
 
+    /**
+     * Funcion para realizar la modificacion del autor seleccionado enviando los
+     * datos ingresados al servicio
+     *
+     * @param modelo
+     * @param id
+     * @param nombre
+     * @return
+     */
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping("/modificar/{id}")
     public String modificar(ModelMap modelo, @PathVariable String id, @RequestParam String nombre) {
@@ -107,6 +127,12 @@ public class AutorController {
         }
     }
 
+    /**
+     * Funcion para dar de baja autor seleccionado mediante ID
+     *
+     * @param id
+     * @return
+     */
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/baja/{id}")
     public String baja(@PathVariable String id) {
@@ -120,6 +146,12 @@ public class AutorController {
 
     }
 
+    /**
+     * Controlador para dar de alta autor seleccionado mediante ID
+     *
+     * @param id
+     * @return
+     */
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/alta/{id}")
     public String alta(@PathVariable String id) {
@@ -132,6 +164,12 @@ public class AutorController {
         }
     }
 
+    /**
+     * Controlador para eliminar autor seleccionado mediante ID
+     *
+     * @param id
+     * @return
+     */
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable String id) {

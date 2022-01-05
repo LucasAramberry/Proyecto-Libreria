@@ -298,4 +298,11 @@ a{
     margin-bottom: 2%
 }
 
-/*****************************ESTILOS DROPDOWN***************************/
+/*****************************ESTILOS BOTONES INICIO ADMIN***************************/
+
+.botones-inicio{
+    width: 20rem;
+    margin: 1% auto;
+    text-align: center;
+    color: white
+}

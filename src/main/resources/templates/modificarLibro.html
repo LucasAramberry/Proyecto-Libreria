@@ -18,10 +18,10 @@
 
             <form th:action="@{/libros/modificar/__${libro.id}__}" method="POST" enctype="multipart/form-data">
 
-                <!--<p th:if="${error != null}" th:text="${error}" style="color:red;"></p>-->
                 <div class="form-group">
                     <h2>Modificar Libro</h2>
                 </div>
+
                 <input hidden th:value="${id}" name="id">
 
                 <div class="form-group">
@@ -29,60 +29,35 @@
                     <input th:value="${libro.isbn}" type="text" class="form-control" name="isbn">
                     <small class="text-white">El isbn debe contener 14 digitos numericos.</small>
                 </div>
+
                 <img th:src="@{'/foto/libro/' + ${libro.id}}" class="rounded float-end" alt="Portada">
 
                 <div class="form-group">
-
                     <label id="colorLabel" for="titulo">Titulo del Libro</label>
                     <input th:value="${libro.titulo}" type="textarea" class="form-control" name="titulo">
-
                 </div>
 
                 <div class="form-group">
-
                     <label id="colorLabel" for="descripcion">Descripcion del Libro</label>
                     <input th:value="${libro.descripcion}" type="text" class="form-control" name="descripcion">
-
                 </div>
 
                 <div class="form-group">
-
                     <label id="colorLabel" for="anio">Año</label>
                     <input th:value="${libro.anio}" type="number" class="form-control" name="anio">
-
                 </div>
 
                 <div class="form-group">
-
                     <label id="colorLabel" for="ejemplares">Cantidad de ejemplares</label>
                     <input th:value="${libro.ejemplares}" type="number" class="form-control" name="ejemplares">
-
                 </div>
-
 
                 <div class="form-group">
                     <label id="colorLabel" for="archivo">Foto</label>
                     <input type="file" class="form-control" name="archivo" th:value="${libro.foto}"/>
                 </div>
 
-                <!--                <div class="form-group">
-                
-                                    <label id="colorLabel" for="ejemplaresPrestados">Cantidad de ejemplares prestados</label>
-                                    <input th:value="${libro.ejemplaresPrestados}" type="number" class="form-control" name="ejemplaresPrestados">
-                
-                                </div>
-                
-                                <div class="form-group">
-                
-                                    <label id="colorLabel" for="ejemplaresRestantes">Cantidad de ejemplares restantes</label>
-                                    <input th:value="${libro.ejemplaresRestantes}" type="number" class="form-control" name="ejemplaresRestantes">
-                
-                                </div>-->
-
-
-
                 <div class="form-group">
-
                     <h2>Autor</h2>
                     <select class="form-control" name="idAutor"> 
                         <option selected disabled value="">Seleccionar</option>
@@ -92,11 +67,9 @@
                     <label id="colorLabel" for="nombreAutor">Nombre del autor</label>
                     <input th:value="${libro.autor.nombre}" type="text" class="form-control" name="nombreAutor" maxlength="25">
                     <small class="text-white">Si selecciono autor no completar este campo</small>
-
                 </div>
 
                 <div class="form-group">
-
                     <h2>Editorial</h2>
                     <select class="form-control" name="idEditorial"> 
                         <option selected disabled value="">Seleccionar</option>
@@ -106,34 +79,18 @@
                     <label id="colorLabel" for="nombreEditorial">Nombre de la editorial</label>
                     <input th:value="${libro.editorial.nombre}" type="text" class="form-control" name="nombreEditorial" maxlength="25">
                     <small class="text-white">Si selecciono editorial no completar este campo</small>
-
                 </div>
 
                 <div class="form-group2">
-
                     <button type="submit" class="btn btn-dark">Modificar Libro</button>
                     <a class="btn btn-danger" href="/libros" role="button">Volver</a>
-
                 </div>
 
             </form>
 
-
-            <!--            <div th:if="${exito}!=null" class="card text-white bg-success mb-3" >
-                            <div class="card-body">
-                                <h5 class="card-title">Exito</h5>
-                                <p class="card-text" th:text="${exito}"></p>
-                            </div>
-                        </div>
-            
-                        <div th:if="${error}!=null" class="card text-white bg-danger mb-3" >
-                            <div class="card-body">
-                                <h5 class="card-title">Error</h5>
-                                <p class="card-text" th:text="${error}"></p>
-                            </div>
-                        </div>-->
         </div>
 
+        <!--FOOTER-->
         <footer th:replace="/fragments/footer :: footer"></footer>
 
     </body>

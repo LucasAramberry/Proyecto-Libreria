@@ -20,7 +20,7 @@
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/prestamo/mis-prestamos/__${session.usuariosession.id}__}" th:if="${session.usuariosession != null}"  sec:authorize="hasRole('USUARIO')">Mis Prestamos</a>
             </li>
-            
+
             <li class="nav-item">
                 <a class="nav-link" href="/libros" th:if="${session.usuariosession != null}" sec:authorize="hasRole('ADMIN')">Libros</a>
             </li>
@@ -32,7 +32,10 @@
             <li class="nav-item">
                 <a class="nav-link" href="/editoriales" th:if="${session.usuariosession != null}" sec:authorize="hasRole('ADMIN')">Editoriales</a>
             </li>
-            
+
+            <li class="nav-item">
+                <a class="nav-link" href="/admin-usuarios" th:if="${session.usuariosession != null}" sec:authorize="hasRole('ADMIN')">Usuarios</a>
+            </li>
         </ul>
 
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
@@ -45,7 +48,7 @@
                 <a class="nav-link" href="/login" th:if="${session.usuariosession == null}" >Iniciar Sesion</a>
             </li>
 
-            
+
 
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/usuario/editar-perfil(id=__${session.usuariosession.id}__)}" th:if="${session.usuariosession != null}" >EDITAR PERFIL</a>

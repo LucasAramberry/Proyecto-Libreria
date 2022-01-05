@@ -1,59 +1,53 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
+    <!--HEAD-->
     <head>
         <title>Libreria - Registro Libro</title>
     </head>
     <head th:replace="/fragments/head :: head"></head>
 
+    <!--BODY-->
     <body id="fondoColor">
 
+        <!--NAVBAR-->
         <nav th:replace="/fragments/navbar :: nav"></nav>
 
+        <!--FORM REGISTRO LIBRO-->
         <div>
 
             <form th:action="@{/libros/registro}" method="POST" enctype="multipart/form-data">
 
-                <p th:if="${error != null}" th:text="${error}" style="color:red;"></p>
+                <!--<p th:if="${error != null}" th:text="${error}" style="color:red;"></p>-->
+                
                 <div class="form-group">
-
                     <h2>Libro</h2>
                 </div>
+                
                 <div class="form-group">
-
                     <label id="colorLabel" for="isbn">ISBN</label>
                     <input type="text" class="form-control" name="isbn">
                     <small class="text-white">El isbn debe contener 14 digitos numericos.</small>
-
                 </div>
 
                 <div class="form-group">
-
                     <label id="colorLabel" for="titulo">Titulo del Libro</label>
                     <input type="text" class="form-control" name="titulo">
-
                 </div>
 
                 <div class="form-group">
-
                     <label id="colorLabel" for="descripcion">Descripcion del Libro</label>
-                    <!--<textarea name="descripcion" rows="5" cols="40"></textarea>-->
                     <input type="textarea" class="form-control" name="descripcion">
-
                 </div>
 
                 <div class="form-group">
-
                     <label id="colorLabel" for="anio">Año</label>
                     <input type="number" class="form-control" name="anio">
-
                 </div>
 
                 <div class="form-group">
-
                     <label id="colorLabel" for="ejemplares">Cantidad de ejemplares</label>
                     <input type="number" class="form-control" name="ejemplares">
-
                 </div>
 
                 <div class="form-group">
@@ -112,9 +106,8 @@
                         </div>-->
         </div>
 
-        <!--<div class="fixed-bottom">-->
+        <!--FOOTER-->
         <footer th:replace="/fragments/footer :: footer"></footer>
-        <!--</div>-->
     </body>
 
 </html>
