@@ -13,11 +13,18 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * Controlador para gestionar la entidad Usuario en donde se realizan las
+ * funciones de registrar, modificar o dar de alta/baja
+ *
+ * @author Lucas Aramberry / aramberrylucas@gmail.com
+ */
 @Controller
 @RequestMapping("/usuario")
 public class UsuarioController {
@@ -29,6 +36,12 @@ public class UsuarioController {
     @Autowired
     private LibroRepositorio libroRepositorio;
 
+    /**
+     * Controlador para registrarse
+     *
+     * @param modelo
+     * @return
+     */
     @GetMapping("/registro")
     public String registrar(ModelMap modelo) {
         List<Zona> zonas = zonaRepositorio.findAll();
@@ -36,6 +49,21 @@ public class UsuarioController {
         return "registroUsuario.html";
     }
 
+    /**
+     * Controlador para relizar el registro del usuario
+     *
+     * @param modelo
+     * @param archivo
+     * @param nombre
+     * @param apellido
+     * @param mail
+     * @param clave
+     * @param clave2
+     * @param documento
+     * @param telefono
+     * @param idZona
+     * @return
+     */
     @PostMapping("/registro")
     public String registro(ModelMap modelo, MultipartFile archivo, @RequestParam String nombre, @RequestParam String apellido, @RequestParam String mail, @RequestParam String clave, @RequestParam String clave2, @RequestParam String documento, @RequestParam String telefono, @RequestParam String idZona) {
         try {
@@ -59,6 +87,14 @@ public class UsuarioController {
         return "exito.html";
     }
 
+    /**
+     * Controlador para ingresar a editar el perfil
+     *
+     * @param session
+     * @param id
+     * @param model
+     * @return
+     */
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USUARIO')")
     @GetMapping("/editar-perfil")
     public String editarPerfil(HttpSession session, @RequestParam String id, ModelMap model) {
@@ -79,9 +115,26 @@ public class UsuarioController {
         return "modificarUsuario.html";
     }
 
+    /**
+     * Controlador para realizar un cambio en el perfil
+     *
+     * @param modelo
+     * @param session
+     * @param archivo
+     * @param id
+     * @param nombre
+     * @param apellido
+     * @param mail
+     * @param clave
+     * @param clave2
+     * @param documento
+     * @param telefono
+     * @param idZona
+     * @return
+     */
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USUARIO')")
     @PostMapping("/actualizar-perfil")
-    public String registrar(ModelMap modelo, HttpSession session, MultipartFile archivo, @RequestParam String id, @RequestParam String nombre, @RequestParam String apellido, @RequestParam String mail, @RequestParam String clave, @RequestParam String clave2, @RequestParam String documento, @RequestParam String telefono, @RequestParam String idZona) {
+    public String actualizarPerfil(ModelMap modelo, HttpSession session, MultipartFile archivo, @RequestParam String id, @RequestParam String nombre, @RequestParam String apellido, @RequestParam String mail, @RequestParam String clave, @RequestParam String clave2, @RequestParam String documento, @RequestParam String telefono, @RequestParam String idZona) {
 
         Usuario usuario = null;
         try {
@@ -103,6 +156,42 @@ public class UsuarioController {
             modelo.put("usuario", usuario);
 
             return "modificarUsuario.html";
+        }
+    }
+
+    /**
+     * Controlador para dar de alta un usuario
+     *
+     * @param id
+     * @return
+     */
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping("/baja/{id}")
+    public String baja(@PathVariable String id) {
+
+        try {
+            usuarioServicio.baja(id);
+            return "redirect:/admin-usuarios";
+        } catch (Exception e) {
+            return "redirect:/";
+        }
+    }
+
+    /**
+     * Controlador para dar de baja un usuario
+     *
+     * @param id
+     * @return
+     */
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping("/alta/{id}")
+    public String alta(@PathVariable String id) {
+
+        try {
+            usuarioServicio.alta(id);
+            return "redirect:/admin-usuarios";
+        } catch (Exception e) {
+            return "redirect:/";
         }
     }
 }

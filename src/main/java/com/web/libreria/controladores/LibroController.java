@@ -2,7 +2,6 @@ package com.web.libreria.controladores;
 
 import com.web.libreria.entidades.Autor;
 import com.web.libreria.entidades.Editorial;
-import com.web.libreria.entidades.Libro;
 import com.web.libreria.errores.ErrorServicio;
 import com.web.libreria.servicios.AutorServicio;
 import com.web.libreria.servicios.EditorialServicio;
@@ -19,6 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * Controlador para gestionar la entidad Libro en donde se realizan las
+ * funciones de registrar, modificar, eliminar o dar de alta/baja
+ *
+ * @author Lucas Aramberry / aramberrylucas@gmail.com
+ */
 @Controller
 @RequestMapping("/libros")
 public class LibroController {
@@ -30,6 +35,12 @@ public class LibroController {
     @Autowired
     private EditorialServicio editorialServicio;
 
+    /**
+     * Controlador para traer el registro de un libro
+     *
+     * @param modelo
+     * @return
+     */
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/registro")
     public String registroLibro(ModelMap modelo) {
@@ -40,6 +51,22 @@ public class LibroController {
         return "registroLibro.html";
     }
 
+    /**
+     * Controlador para enviar los datos del libro registrado a la DB
+     *
+     * @param modelo
+     * @param archivo
+     * @param isbn
+     * @param titulo
+     * @param descripcion
+     * @param anio
+     * @param ejemplares
+     * @param idAutor
+     * @param nombreAutor
+     * @param idEditorial
+     * @param nombreEditorial
+     * @return
+     */
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping("/registro")
     public String registroLibro(ModelMap modelo, MultipartFile archivo, @RequestParam String isbn, @RequestParam String titulo, @RequestParam String descripcion, @RequestParam Integer anio, @RequestParam Integer ejemplares, String idAutor, String nombreAutor, String idEditorial, String nombreEditorial) {
@@ -67,40 +94,13 @@ public class LibroController {
         return "exito.html";
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USUARIO')")
-    @GetMapping("/mostrarLibro/{id}")
-    public String mostrarLibros(@PathVariable String id, ModelMap modelo) {
-
-        modelo.put("libro", libroServicio.getOne(id));
-
-        return "mostrarLibro.html";
-    }
-
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    @GetMapping("/baja/{id}")
-    public String baja(@PathVariable String id) {
-
-        try {
-            libroServicio.baja(id);
-            return "redirect:/libros";
-        } catch (Exception e) {
-            return "redirect:/";
-        }
-
-    }
-
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    @GetMapping("/alta/{id}")
-    public String alta(@PathVariable String id) {
-
-        try {
-            libroServicio.alta(id);
-            return "redirect:/libros";
-        } catch (Exception e) {
-            return "redirect:/";
-        }
-    }
-
+    /**
+     * Controlador para modificar un libro
+     *
+     * @param id
+     * @param modelo
+     * @return
+     */
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/modificar/{id}") //PATHVARIABLE
     public String modificar(@PathVariable String id, ModelMap modelo) {
@@ -115,6 +115,23 @@ public class LibroController {
 
     }
 
+    /**
+     * Controlador para completar la modificacion del libro
+     *
+     * @param modelo
+     * @param archivo
+     * @param id
+     * @param isbn
+     * @param titulo
+     * @param descripcion
+     * @param anio
+     * @param ejemplares
+     * @param idAutor
+     * @param nombreAutor
+     * @param idEditorial
+     * @param nombreEditorial
+     * @return
+     */
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping("/modificar/{id}")
     public String modificar(ModelMap modelo, MultipartFile archivo, @PathVariable String id, @RequestParam String isbn, @RequestParam String titulo, @RequestParam String descripcion, @RequestParam Integer anio, @RequestParam Integer ejemplares, String idAutor, String nombreAutor, String idEditorial, @RequestParam(required = false) String nombreEditorial) {
@@ -126,6 +143,73 @@ public class LibroController {
         } catch (Exception e) {
 
             return "modificarLibro.html";
+        }
+    }
+
+    /**
+     * Controlador para mostrar informacion de un libro
+     *
+     * @param id
+     * @param modelo
+     * @return
+     */
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USUARIO')")
+    @GetMapping("/mostrarLibro/{id}")
+    public String mostrarLibros(@PathVariable String id, ModelMap modelo) {
+
+        modelo.put("libro", libroServicio.getOne(id));
+
+        return "mostrarLibro.html";
+    }
+
+    /**
+     * Controlador para dar de baja un libro
+     *
+     * @param id
+     * @return
+     */
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping("/baja/{id}")
+    public String baja(@PathVariable String id) {
+        try {
+            libroServicio.baja(id);
+            return "redirect:/libros";
+        } catch (Exception e) {
+            return "redirect:/";
+        }
+    }
+
+    /**
+     * Controlador para dar de alta un libro
+     *
+     * @param id
+     * @return
+     */
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping("/alta/{id}")
+    public String alta(@PathVariable String id) {
+        try {
+            libroServicio.alta(id);
+            return "redirect:/libros";
+        } catch (Exception e) {
+            return "redirect:/";
+        }
+    }
+
+    /**
+     * Controlador para eliminar un libro
+     * @param id
+     * @return 
+     */
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable String id) {
+
+        try {
+            libroServicio.delete(id);
+            return "redirect:/libros";
+        } catch (Exception e) {
+            return "redirect:/libros";
         }
     }
 }

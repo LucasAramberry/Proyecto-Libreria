@@ -19,6 +19,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+/**
+ * Controlador para gestionar la entidad Prestamo en donde se realizan las
+ * funciones de realizar prestamos
+ *
+ * @author Lucas Aramberry / aramberrylucas@gmail.com
+ */
 @PreAuthorize("hasAnyRole('ROLE_USUARIO')")
 @Controller
 @RequestMapping("/prestamo")
@@ -31,6 +37,12 @@ public class PrestamoController {
     @Autowired
     private UsuarioServicio usuarioServicio;
 
+    /**
+     * Funcion para ingresar a la vista de registrar prestamo
+     *
+     * @param modelo
+     * @return
+     */
     @GetMapping("/registrar")
     public String prestamo(ModelMap modelo) {
         List<Libro> libros = libroRepositorio.findAll();
@@ -38,6 +50,18 @@ public class PrestamoController {
         return "prestamo.html";
     }
 
+    /**
+     * Funcion para realizar el registro del prestamo enviando los datos
+     * ingresados a la BD
+     *
+     * @param modelo
+     * @param fechaPrestamo
+     * @param fechaDevolucion
+     * @param idLibro
+     * @param idUsuario
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/registrar")
     public String prestamo(ModelMap modelo, @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaPrestamo, @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaDevolucion, @RequestParam String idLibro, @RequestParam String idUsuario) throws Exception {
 
@@ -55,11 +79,34 @@ public class PrestamoController {
         return "exito.html";
     }
 
+    /**
+     * Funcion para ver los prestamos que realizo un usuario
+     *
+     * @param idUsuario
+     * @param modelo
+     * @return
+     */
     @GetMapping("/mis-prestamos/{idUsuario}")
-    public String mostrarPrestamos(@PathVariable String idUsuario,ModelMap modelo) {
+    public String mostrarPrestamos(@PathVariable String idUsuario, ModelMap modelo) {
         List<Prestamo> listaPrestamos = prestamoServicio.listaPrestamosUsuario(idUsuario);
         modelo.put("prestamos", listaPrestamos);
-        
+
         return "mostrarPrestamos.html";
+    }
+    
+    /**
+     * Controlador para eliminar un prestamo
+     * @param id
+     * @return 
+     */
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable String id) {
+
+        try {
+            prestamoServicio.delete(id);
+            return "redirect:/inicio";
+        } catch (Exception e) {
+            return "redirect:/inicio";
+        }
     }
 }

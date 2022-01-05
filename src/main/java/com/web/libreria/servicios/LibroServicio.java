@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+//Servicio de la entidad Libro
 @Service
 public class LibroServicio {
 
@@ -24,9 +25,7 @@ public class LibroServicio {
     @Autowired
     private FotoServicio fotoServicio;
 
-    
     //------------------------------METODOS CRUD-----------------------------------
-    
     /**
      * Metodo para registrar Libro
      *
@@ -168,8 +167,19 @@ public class LibroServicio {
         return libroRepositorio.save(entidad);
     }
 
+    /**
+     * Metodo para eliminar un libro
+     *
+     * @param id
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
+    public void delete(String id) {
+
+        Libro libro = getOne(id);
+        libroRepositorio.delete(libro);
+    }
+
     //----------------------------METODOS VALIDACION-----------------------------------
-    
     /**
      * Metodo para validar datos del libro
      *
@@ -246,7 +256,6 @@ public class LibroServicio {
     }
 
     //----------------------------METODOS CONSULTA DB------------------------------
-    
     /**
      * Metodo para buscar autor por nombre
      *
@@ -271,8 +280,9 @@ public class LibroServicio {
 
     /**
      * Metodo para traer un libro por id
+     *
      * @param id
-     * @return 
+     * @return
      */
     @Transactional(readOnly = true)
     public Libro getById(String id) {
@@ -281,8 +291,9 @@ public class LibroServicio {
 
     /**
      * Metodo para traer un libro por id
+     *
      * @param id
-     * @return 
+     * @return
      */
     @Transactional(readOnly = true)
     public Libro getOne(String id) {
@@ -291,7 +302,8 @@ public class LibroServicio {
 
     /**
      * Metodo para traer una lista de todos los libros ingresados
-     * @return 
+     *
+     * @return
      */
     @Transactional(readOnly = true)
     public List<Libro> listarLibros() {
@@ -299,12 +311,13 @@ public class LibroServicio {
     }
 
     /**
-     * Metodo para traer una lista de todos los libros ingresados que esten activos 
-     * @return 
+     * Metodo para traer una lista de todos los libros ingresados que esten activos
+     *
+     * @return
      */
     @Transactional(readOnly = true)
     public List<Libro> listarLibrosActivos() {
         return libroRepositorio.listalibrosActivos();
     }
-    
+
 }

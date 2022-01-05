@@ -77,6 +77,29 @@ public class PrestamoServicio {
         }
     }
 
+    /**
+     * Metodo para eliminar un prestamo
+     *
+     * @param id
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
+    public void delete(String id) {
+
+        Prestamo prestamo = getOne(id);
+        prestamoRepositorio.delete(prestamo);
+    }
+    
+    /**
+     * Metodo para traer un prestamo por id
+     *
+     * @param id
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public Prestamo getOne(String id) {
+        return prestamoRepositorio.getOne(id);
+    }
+    
     @Transactional(readOnly = true)
     public List<Prestamo> listaPrestamos() {
         return prestamoRepositorio.findAll();

@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
+    <!--HEAD-->
     <head>
-        <title>Libreria - Prestamo</title>
+        <title>Libreria - Mis Prestamos</title>
     </head>
     <head th:replace="/fragments/head :: head"></head>
 
+    <!--BODY-->
     <body id="fondoColor">
 
-        <header>
-            <nav th:replace="/fragments/navbar :: nav"></nav>
-        </header>
+        <!--NAVBAR-->
+        <nav th:replace="/fragments/navbar :: nav"></nav>
 
+        <!--TABLA DE PRESTAMO DEL USUARIO-->
         <div>
             <h1 class="text-center text-white">PRESTAMOS REALIZADOS</h1>
             <table class="table table-dark" border >
@@ -22,6 +24,7 @@
                         <th scope="col">Fecha Finalizacion</th>
                         <th scope="col">Autor</th>
                         <th scope="col">Editorial</th>
+                        <th scope="col">Acciones</th>
                     </tr>
                 </thead>
                 <tbody th:each="prestamo : ${prestamos}">
@@ -35,18 +38,22 @@
                         <!--                        <td>
                                                     <i th:if="${libro.alta}" class="fa fa-circle text-success"></i>
                                                     <i th:unless="${libro.alta}"   class="fa fa-circle" style="color:red;"></i>
-                                                </td>
-                                                <td>
-                                                    <a th:href="@{/libros/alta/__${libro.id}__}" title="Alta"><i class="fa fa-arrow-up"></i></a>
-                                                    <a th:href="@{/libros/baja/__${libro.id}__}" title="Baja"><i class="fa fa-ban"></i></a> 
-                                                    <a th:href="@{/libros/modificar/__${libro.id}__}" title="Modificar"><i class="fas fa-feather-alt"></i></a>
-                                                    <a th:href="@{/libros/delete/__${libro.id}__}"  title="Eliminar"><i class="fas fa-archive"></i></a>
-                                                </td>-->
+                                                </td>-->                                                
+                        <td>
+<!--                            <a th:href="@{/prestamo/alta/__${prestamo.id}__}" title="Alta"><i class="fa fa-arrow-up"></i></a>-->
+                            <!--<a th:href="@{/prestamo/baja/__${prestamo.id}__}" title="Baja"><i class="fa fa-ban"></i></a>--> 
+                            <!--<a th:href="@{/prestamo/modificar/__${prestamo.id}__}" title="Modificar"><i class="fas fa-feather-alt"></i></a>-->
+                            <a th:href="@{/prestamo/delete/__${prestamo.id}__}"  title="Eliminar"><i class="fas fa-archive"></i></a>
+                        </td>
                     </tr>
                 </tbody>
             </table>
+            <div id="agregar-button">
+                <a th:href="@{/prestamo/registrar}">Añadir Prestamo <i class="fas fa-plus"></i></a>
+            </div>
         </div>
 
+        <!--FOOTER-->
         <div class="fixed-bottom">
             <footer th:replace="/fragments/footer :: footer"></footer>
         </div>

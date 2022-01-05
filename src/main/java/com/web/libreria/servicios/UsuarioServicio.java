@@ -168,6 +168,38 @@ public class UsuarioServicio implements UserDetailsService {
         }
     }
 
+    /**
+     * Metodo para dar de alta un usuario
+     *
+     * @param id
+     * @return
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
+    public Usuario alta(String id) {
+
+        Usuario entidad = usuarioRepositorio.getOne(id);
+        entidad.setAlta(new Date());
+        entidad.setBaja(null);
+
+        return usuarioRepositorio.save(entidad);
+    }
+
+    /**
+     * Metodo para dar de baja un usuario
+     *
+     * @param id
+     * @return
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
+    public Usuario baja(String id) {
+
+        Usuario entidad = usuarioRepositorio.getOne(id);
+        entidad.setBaja(new Date());
+        entidad.setAlta(null);
+
+        return usuarioRepositorio.save(entidad);
+    }
+
     //*****************************METODOS REPOSITORIO*********************************
     @Transactional(readOnly = true)
     public Usuario buscarPorId(String id) throws ErrorServicio {
